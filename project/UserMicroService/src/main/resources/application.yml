@@ -1,0 +1,28 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: users
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
+    datasource:
+      url: jdbc:mysql://localhost:3307/UserService
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      username: User
+      password: Password
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: metrics,prometheus,health
