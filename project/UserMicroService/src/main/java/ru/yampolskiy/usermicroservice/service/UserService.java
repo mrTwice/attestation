@@ -26,17 +26,17 @@ public class UserService {
 
     public User getUserById(Long id) {
         Optional<User> userOptional = userRepository.findById(id);
-        return userOptional.orElseThrow(() -> new UserNotFoundException("Пользователь таким id "+ id +" не существует"));
+        return userOptional.orElseThrow(() -> new UserNotFoundException(id));
     }
 
     public User findUserByUserName(String username){
         Optional<User> optionalUser = userRepository.findUserByUsername(username);
-        return optionalUser.orElseThrow(() -> new UserNotFoundException("Пользователь "+ username +" не существует"));
+        return optionalUser.orElseThrow(() -> new UserNotFoundException("Пользователь "+ username +" не найден"));
     }
 
     public User createUser(User user) {
         if (userRepository.existsUserByUsername(user.getUsername())) {
-            throw new UserAlreadyExistsException("Пользователь с таким именем уже существует");
+            throw new UserAlreadyExistsException(user);
         }
         user.setId(null);
         user.setActive(true);
@@ -48,14 +48,14 @@ public class UserService {
 
     public User updateUser(Long id, User user) {
         if (!userRepository.existsById(id)) {
-            throw new UserNotFoundException("Пользователь таким id "+ id +" не существует");
+            throw new UserNotFoundException(id);
         }
         return userRepository.save(user);
     }
 
     public void deleteUser(Long id) {
         if (!userRepository.existsById(id)) {
-            throw new UserNotFoundException("Пользователь таким id "+ id +" не существует");
+            throw new UserNotFoundException(id);
         }
         User deleteUser = userRepository.deleteUserById(id).get();
     }
