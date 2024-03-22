@@ -9,6 +9,10 @@
 <p>ID: <span th:text="${task.id}"></span></p>
 <p>Title: <span th:text="${task.title}"></span></p>
 <p>Description: <span th:text="${task.description}"></span></p>
-<a href="/tasks">Back to Tasks</a>
+<a href="/tasks">Back to Tasks</a><br> <br>
+
+<form th:action="@{/logout}" method="post">
+    <button type="submit">Выйти</button>
+</form>
 </body>
 </html>

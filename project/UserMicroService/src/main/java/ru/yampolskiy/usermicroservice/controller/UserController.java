@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.yampolskiy.usermicroservice.exception.UserAlreadyExistsException;
+import ru.yampolskiy.usermicroservice.exception.UserNotFoundException;
 import ru.yampolskiy.usermicroservice.model.User;
 import ru.yampolskiy.usermicroservice.service.UserService;
 
@@ -28,7 +30,7 @@ public class UserController {
         try {
             User user = userService.getUserById(id);
             return ResponseEntity.ok(user);
-        } catch (RuntimeException ex) {
+        } catch (UserNotFoundException ex) {
             return ResponseEntity.notFound().build();
         }
     }
@@ -38,7 +40,7 @@ public class UserController {
         try {
             User user = userService.findUserByUserName(username);
             return ResponseEntity.ok(user);
-        } catch (RuntimeException ex) {
+        } catch (UserNotFoundException ex) {
             return ResponseEntity.notFound().build();
         }
     }
@@ -48,7 +50,7 @@ public class UserController {
         try {
             User createdUser = userService.createUser(user);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
-        } catch (RuntimeException ex) {
+        } catch (UserAlreadyExistsException ex) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
     }
@@ -58,7 +60,7 @@ public class UserController {
         try {
             User updatedUser = userService.updateUser(id, user);
             return ResponseEntity.ok(updatedUser);
-        } catch (RuntimeException ex) {
+        } catch (UserNotFoundException ex) {
             return ResponseEntity.notFound().build();
         }
     }
@@ -68,7 +70,7 @@ public class UserController {
         try {
             userService.deleteUser(id);
             return ResponseEntity.noContent().build();
-        } catch (RuntimeException ex) {
+        } catch (UserNotFoundException ex) {
             return ResponseEntity.notFound().build();
         }
     }
