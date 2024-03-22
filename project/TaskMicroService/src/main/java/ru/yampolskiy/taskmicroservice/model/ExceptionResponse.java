@@ -1,4 +1,4 @@
-package ru.yampolskiy.usermicroservice.model;
+package ru.yampolskiy.taskmicroservice.model;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -15,6 +15,7 @@ public class UserAlreadyExistsException extends RuntimeException {
     }
 
     public UserAlreadyExistsException(User user) {
+        this.user = user;
         this.message = "Пользователь с именем " + user.getUsername() + " cуществует";
     }
 }

@@ -2,6 +2,8 @@ package ru.yampolskiy.taskmicroservice.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.yampolskiy.taskmicroservice.exception.TaskIdNotNullException;
+import ru.yampolskiy.taskmicroservice.exception.TaskNotFoundException;
 import ru.yampolskiy.taskmicroservice.model.Task;
 import ru.yampolskiy.taskmicroservice.model.TaskStatus;
 import ru.yampolskiy.taskmicroservice.repository.TaskRepository;
@@ -27,12 +29,12 @@ public class TaskService {
 
     public Task getTaskById(Long id) {
         Optional<Task> taskOptional = taskRepository.findById(id);
-        return taskOptional.orElse(null);
+        return taskOptional.orElseThrow(() -> new TaskNotFoundException(id));
     }
 
     public Task createTask(Task task) {
         if (task.getId() != null) {
-            throw new IllegalArgumentException("ID должен быть пустым при создании задачи");
+            throw new TaskIdNotNullException(task);
         }
         task.setCreated(LocalDateTime.now());
         task.setStatus(TaskStatus.OPEN);
@@ -42,7 +44,7 @@ public class TaskService {
 
     public Task updateTask(Long id, Task task) {
         if (!taskRepository.existsById(id)) {
-            throw new IllegalArgumentException("Задачи с ID " + id + " не существует");
+            throw new TaskNotFoundException(id);
         }
         task.setId(id);
         task.setLastUpdate(LocalDateTime.now());
@@ -51,7 +53,7 @@ public class TaskService {
 
     public void deleteTask(Long id) {
         if (!taskRepository.existsById(id)) {
-            throw new IllegalArgumentException("Задачи с ID " + id + " не существует");
+            throw new TaskNotFoundException(id);
         }
         taskRepository.deleteById(id);
     }

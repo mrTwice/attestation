@@ -2,10 +2,12 @@ package ru.yampolskiy.usermicroservice.exception;
 
 import lombok.Getter;
 import lombok.Setter;
+import ru.yampolskiy.usermicroservice.model.User;
 
 @Getter
 @Setter
 public class UserNotFoundException extends RuntimeException {
+    private User user;
     private Long id;
     private String message;
 

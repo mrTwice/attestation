@@ -1,25 +1,25 @@
-package ru.yampolskiy.usermicroservice.advice;
+package ru.yampolskiy.taskmicroservice.advice;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import ru.yampolskiy.usermicroservice.exception.UserAlreadyExistsException;
-import ru.yampolskiy.usermicroservice.exception.UserNotFoundException;
-import ru.yampolskiy.usermicroservice.model.ExceptionResponse;
+import ru.yampolskiy.taskmicroservice.exception.TaskIdNotNullException;
+import ru.yampolskiy.taskmicroservice.exception.TaskNotFoundException;
+import ru.yampolskiy.taskmicroservice.model.ExceptionResponse;
 
 @ControllerAdvice
-public class ExceptionControllerAdvice {
+public class TaskMicroserviceExceptionControllerAdvice {
 
-    @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<ExceptionResponse> handleUserNotFoundException(UserNotFoundException e) {
+    @ExceptionHandler(TaskNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleUserNotFoundException(TaskNotFoundException e) {
         ExceptionResponse exceptionResponse = new ExceptionResponse(e.getClass().getPackage().getName(), e.getClass().getSimpleName(), e.getMessage());
 
         return new ResponseEntity<>(exceptionResponse, HttpStatus.OK);
     }
 
-    @ExceptionHandler(UserAlreadyExistsException.class)
-    public ResponseEntity<ExceptionResponse> handleUserAlreadyExistsException(UserAlreadyExistsException e) {
+    @ExceptionHandler(TaskIdNotNullException.class)
+    public ResponseEntity<ExceptionResponse> handleUserAlreadyExistsException(TaskIdNotNullException e) {
         ExceptionResponse exceptionResponse = new ExceptionResponse(e.getClass().getPackage().getName(), e.getClass().getSimpleName(), e.getMessage());
         return new ResponseEntity<>(exceptionResponse, HttpStatus.OK);
     }

@@ -2,7 +2,6 @@ package ru.yampolskiy.usermicroservice.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ru.yampolskiy.usermicroservice.exception.UserAlreadyExistsException;
 import ru.yampolskiy.usermicroservice.exception.UserNotFoundException;
 import ru.yampolskiy.usermicroservice.model.Role;
