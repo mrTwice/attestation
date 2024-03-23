@@ -23,4 +23,16 @@ public class TaskMicroserviceExceptionControllerAdvice {
         ExceptionResponse exceptionResponse = new ExceptionResponse(e.getClass().getPackage().getName(), e.getClass().getSimpleName(), e.getMessage());
         return new ResponseEntity<>(exceptionResponse, HttpStatus.OK);
     }
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<ExceptionResponse> handleRuntimeException(RuntimeException e) {
+        ExceptionResponse exceptionResponse = new ExceptionResponse(e.getClass().getPackage().getName(), e.getClass().getSimpleName(), e.getMessage());
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.OK);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ExceptionResponse> handleException(Exception e) {
+        ExceptionResponse exceptionResponse = new ExceptionResponse(e.getClass().getPackage().getName(), e.getClass().getSimpleName(), e.getMessage());
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.OK);
+    }
 }
