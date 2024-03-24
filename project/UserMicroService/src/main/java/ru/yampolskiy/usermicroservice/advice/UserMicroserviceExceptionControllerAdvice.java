@@ -6,33 +6,38 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import ru.yampolskiy.usermicroservice.exception.UserAlreadyExistsException;
 import ru.yampolskiy.usermicroservice.exception.UserNotFoundException;
-import ru.yampolskiy.usermicroservice.model.ExceptionResponse;
+import ru.yampolskiy.usermicroservice.model.CustomResponse;
+import ru.yampolskiy.usermicroservice.model.ExceptionData;
+import ru.yampolskiy.usermicroservice.model.User;
 
 @ControllerAdvice
 public class UserMicroserviceExceptionControllerAdvice {
 
     @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<ExceptionResponse> handleUserNotFoundException(UserNotFoundException e) {
-        ExceptionResponse exceptionResponse = new ExceptionResponse(e.getClass().getPackage().getName(), e.getClass().getSimpleName(), e.getMessage());
-
-        return new ResponseEntity<>(exceptionResponse, HttpStatus.OK);
+    public ResponseEntity<CustomResponse<User>> handleUserNotFoundException(UserNotFoundException e) {
+        ExceptionData exceptionData = new ExceptionData(e.getClass().getPackage().getName(), e.getClass().getSimpleName(), e.getMessage());
+        CustomResponse<User> customResponse = new CustomResponse<>(1, exceptionData);
+        return new ResponseEntity<>(customResponse, HttpStatus.OK);
     }
 
     @ExceptionHandler(UserAlreadyExistsException.class)
-    public ResponseEntity<ExceptionResponse> handleUserAlreadyExistsException(UserAlreadyExistsException e) {
-        ExceptionResponse exceptionResponse = new ExceptionResponse(e.getClass().getPackage().getName(), e.getClass().getSimpleName(), e.getMessage());
-        return new ResponseEntity<>(exceptionResponse, HttpStatus.OK);
+    public ResponseEntity<CustomResponse<User>> handleUserAlreadyExistsException(UserAlreadyExistsException e) {
+        ExceptionData exceptionData = new ExceptionData(e.getClass().getPackage().getName(), e.getClass().getSimpleName(), e.getMessage());
+        CustomResponse<User> customResponse = new CustomResponse<>(1, exceptionData);
+        return new ResponseEntity<>(customResponse, HttpStatus.OK);
     }
 
     @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<ExceptionResponse> handleRuntimeException(RuntimeException e) {
-        ExceptionResponse exceptionResponse = new ExceptionResponse(e.getClass().getPackage().getName(), e.getClass().getSimpleName(), e.getMessage());
-        return new ResponseEntity<>(exceptionResponse, HttpStatus.OK);
+    public ResponseEntity<CustomResponse<User>> handleRuntimeException(RuntimeException e) {
+        ExceptionData exceptionData = new ExceptionData(e.getClass().getPackage().getName(), e.getClass().getSimpleName(), e.getMessage());
+        CustomResponse<User> customResponse = new CustomResponse<>(1, exceptionData);
+        return new ResponseEntity<>(customResponse, HttpStatus.OK);
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ExceptionResponse> handleException(Exception e) {
-        ExceptionResponse exceptionResponse = new ExceptionResponse(e.getClass().getPackage().getName(), e.getClass().getSimpleName(), e.getMessage());
-        return new ResponseEntity<>(exceptionResponse, HttpStatus.OK);
+    public ResponseEntity<CustomResponse<User>> handleException(Exception e) {
+        ExceptionData exceptionData = new ExceptionData(e.getClass().getPackage().getName(), e.getClass().getSimpleName(), e.getMessage());
+        CustomResponse<User> customResponse = new CustomResponse<>(1, exceptionData);
+        return new ResponseEntity<>(customResponse, HttpStatus.OK);
     }
 }

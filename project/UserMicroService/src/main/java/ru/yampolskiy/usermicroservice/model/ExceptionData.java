@@ -5,13 +5,13 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class ExceptionResponse {
+public class ExceptionData{
 
     private String packageName;
     private String exceptionType;
     private String message;
 
-    public ExceptionResponse(String packageName, String exceptionType, String message) {
+    public ExceptionData(String packageName, String exceptionType, String message) {
         this.packageName = packageName;
         this.exceptionType = exceptionType;
         this.message = message;
