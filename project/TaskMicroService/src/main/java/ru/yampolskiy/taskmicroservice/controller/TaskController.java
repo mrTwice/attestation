@@ -1,9 +1,9 @@
 package ru.yampolskiy.taskmicroservice.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.yampolskiy.taskmicroservice.model.CustomResponse;
 import ru.yampolskiy.taskmicroservice.model.Task;
 import ru.yampolskiy.taskmicroservice.service.TaskService;
 
@@ -17,38 +17,44 @@ public class TaskController {
     private TaskService taskService;
 
     @GetMapping("/user/{id}")
-    public ResponseEntity<List<Task>> getUserTasks (@PathVariable Long id){
+    public ResponseEntity<CustomResponse<List<Task>>> getUserTasks (@PathVariable Long id){
         List<Task> userTasks = taskService.getAllUserTask(id);
-        return ResponseEntity.ok(userTasks);
+        CustomResponse<List<Task>> customResponse = new CustomResponse<>(0, userTasks);
+        return ResponseEntity.ok(customResponse);
     }
 
     @GetMapping
-    public ResponseEntity<List<Task>> getAllTasks() {
+    public ResponseEntity<CustomResponse<List<Task>>> getAllTasks() {
         List<Task> tasks = taskService.getAllTasks();
-        return ResponseEntity.ok(tasks);
+        CustomResponse<List<Task>> customResponse = new CustomResponse<>(0, tasks);
+        return ResponseEntity.ok(customResponse);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Task> getTaskById(@PathVariable Long id) {
+    public ResponseEntity<CustomResponse<Task>> getTaskById(@PathVariable Long id) {
         Task task = taskService.getTaskById(id);
-        return ResponseEntity.ok(task);
+        CustomResponse<Task> customResponse = new CustomResponse<>(0, task);
+        return ResponseEntity.ok(customResponse);
     }
 
     @PostMapping
-    public ResponseEntity<Task> createTask(@RequestBody Task task) {
+    public ResponseEntity<CustomResponse<Task>> createTask(@RequestBody Task task) {
         Task createdTask = taskService.createTask(task);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdTask);
+        CustomResponse<Task> customResponse = new CustomResponse<>(0, createdTask);
+        return ResponseEntity.ok(customResponse);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Task> updateTask(@PathVariable Long id, @RequestBody Task task) {
+    public ResponseEntity<CustomResponse<Task>> updateTask(@PathVariable Long id, @RequestBody Task task) {
         Task updatedTask = taskService.updateTask(id, task);
-        return ResponseEntity.ok(updatedTask);
+        CustomResponse<Task> customResponse = new CustomResponse<>(0, updatedTask);
+        return ResponseEntity.ok(customResponse);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
+    public ResponseEntity<CustomResponse<Task>> deleteTask(@PathVariable Long id) {
         taskService.deleteTask(id);
-        return ResponseEntity.noContent().build();
+        CustomResponse<Task> customResponse = new CustomResponse<>(0, null);
+        return ResponseEntity.ok(customResponse);
     }
 }

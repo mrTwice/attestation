@@ -1,8 +1,10 @@
 package ru.yampolskiy.taskclient.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.yampolskiy.taskclient.clients.TaskClientApi;
+import ru.yampolskiy.taskclient.models.CustomResponse;
 import ru.yampolskiy.taskclient.models.task.Task;
 
 import java.util.List;
@@ -12,28 +14,28 @@ public class TaskService {
     @Autowired
     private TaskClientApi taskClientApi;
 
-    public Task createNewTask(Task task){
-        return taskClientApi.createTask(task).getBody();
+    public CustomResponse<Task> createNewTask(Task task) throws JsonProcessingException {
+        return taskClientApi.createTask(task);
     }
 
-    public void  deleteTask(Long id){
-        taskClientApi.deleteTask(id);
+    public CustomResponse<Task>  deleteTask(Long id) throws JsonProcessingException {
+        return taskClientApi.deleteTask(id);
     }
 
-    public Task updateTask(Long id, Task task){
-        return taskClientApi.updateTask(id, task).getBody();
+    public CustomResponse<Task> updateTask(Long id, Task task) throws JsonProcessingException {
+        return taskClientApi.updateTask(id, task);
     }
 
-    public Task findTaskById(Long id){
-        return taskClientApi.getTaskById(id).getBody();
+    public CustomResponse<Task> findTaskById(Long id) throws JsonProcessingException {
+        return taskClientApi.getTaskById(id);
     }
 
-    public List<Task> findAllUserTasks(Long userId){
-        return taskClientApi.getUserTasks(userId).getBody();
+    public CustomResponse<List<Task>> findAllUserTasks(Long userId) throws JsonProcessingException {
+        return taskClientApi.getUserTasks(userId);
     }
 
-    public List<Task> findAllTask(){
-        return taskClientApi.getAllTasks().getBody();
+    public CustomResponse<List<Task>> findAllTask() throws JsonProcessingException {
+        return taskClientApi.getAllTasks();
     }
 
 }

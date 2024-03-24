@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Exception Data</title>
+</head>
+<body>
+<h1>Exception Data</h1>
+<ul>
+    <li>Package Name: <span th:text="${exceptionData.packageName}">Package Name</span></li>
+    <li>Exception Type: <span th:text="${exceptionData.exceptionType}">Exception Type</span></li>
+    <li>Message: <span th:text="${exceptionData.message}">Message</span></li>
+</ul>
+</body>
+</html>
