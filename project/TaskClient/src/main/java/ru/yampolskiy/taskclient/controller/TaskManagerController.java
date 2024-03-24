@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import ru.yampolskiy.taskclient.models.CustomResponse;
-import ru.yampolskiy.taskclient.models.ExceptionData;
 import ru.yampolskiy.taskclient.models.task.Task;
+import ru.yampolskiy.taskclient.models.user.User;
 import ru.yampolskiy.taskclient.service.TaskService;
 import ru.yampolskiy.taskclient.service.UserService;
 
@@ -24,29 +24,24 @@ public class TaskManagerController {
 
     @Autowired
     private TaskService taskService;
+
     @Autowired
     private UserService userService;
 
     @GetMapping("/tasks")
-    public String getAllTasks(Model model, HttpSession session) throws JsonProcessingException {
+    public String getAllTasks(Model model) throws JsonProcessingException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
-        Long currentUserId = userService.findUserByUserName(currentUsername).getId();
-        CustomResponse<List<Task>> customResponse = taskService.findAllUserTasks(currentUserId);
-
-        if(customResponse.getErrorCode() != 0) {
-            return redirectIfExceptionExist(customResponse, session);
-        }
-
-        List<Task> tasks = customResponse.getResponseData();
+        User currentUser = userService.findUserByUserName(currentUsername);
+        List<Task> tasks = taskService.findAllUserTasks(currentUser.getId()).getResponseData();
         model.addAttribute("tasks", tasks);
-
         return "tasks";
     }
 
     @GetMapping("/tasks/{id}")
     public String getTaskById(@PathVariable Long id, Model model, HttpSession session) throws JsonProcessingException {
-        return redirectIfTaskExist(id, model, session, "task");
+        CustomResponse<Task> customResponse = taskService.findTaskById(id);
+        return handleResponse(customResponse, model, "task", session);
     }
 
     @GetMapping("/tasks/new")
@@ -56,60 +51,52 @@ public class TaskManagerController {
     }
 
     @PostMapping("/tasks")
-    public String createTask(@ModelAttribute Task task, HttpSession session) throws JsonProcessingException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentUsername = authentication.getName();
-        Long currentUserId = userService.findUserByUserName(currentUsername).getId();
-        task.setOwnerId(currentUserId);
-
+    public String createTask(@ModelAttribute Task task, HttpSession session, Authentication authentication) throws JsonProcessingException {
+        User currentUser = getCurrentUser(authentication);
+        task.setOwnerId(currentUser.getId());
         CustomResponse<Task> customResponse = taskService.createNewTask(task);
-        if(customResponse.getErrorCode() != 0) {
-            return redirectIfExceptionExist(customResponse, session);
-        }
-
-        return "redirect:/tasks";
+        return handleResponse(customResponse, session, "redirect:/tasks");
     }
 
     @GetMapping("/tasks/{id}/edit")
     public String editTaskForm(@PathVariable Long id, Model model, HttpSession session) throws JsonProcessingException {
-        return redirectIfTaskExist(id, model, session, "editTask");
+        CustomResponse<Task> customResponse = taskService.findTaskById(id);
+        return handleResponse(customResponse, model, "editTask", session);
     }
 
     @PostMapping("/tasks/{id}/edit")
     public String updateTask(@PathVariable Long id, @ModelAttribute Task task, HttpSession session) throws JsonProcessingException {
         CustomResponse<Task> customResponse = taskService.updateTask(id, task);
-        if(customResponse.getErrorCode() != 0) {
-            return redirectIfExceptionExist(customResponse, session);
-        }
-
-        return "redirect:/tasks";
+        return handleResponse(customResponse, session, "redirect:/tasks");
     }
 
     @PostMapping("/tasks/{id}/delete")
     public String deleteTask(@PathVariable Long id, HttpSession session) throws JsonProcessingException {
         CustomResponse<Task> customResponse = taskService.deleteTask(id);
-        if(customResponse.getErrorCode() != 0) {
-            return redirectIfExceptionExist(customResponse, session);
-        }
-
-        return "redirect:/tasks";
+        return handleResponse(customResponse, session, "redirect:/tasks");
     }
 
-    private String redirectIfTaskExist(Long id, Model model, HttpSession session, String redirectPath) throws JsonProcessingException {
-        CustomResponse<Task> customResponse = taskService.findTaskById(id);
+    private User getCurrentUser(Authentication authentication) {
+        return userService.findUserByUserName(authentication.getName());
+    }
+
+    private String handleResponse(CustomResponse<?> customResponse, Model model, String viewName, HttpSession session) {
         if (customResponse.getErrorCode() != 0) {
-            return redirectIfExceptionExist(customResponse, session);
+            session.setAttribute("exception", customResponse.getResponseError());
+            return "redirect:/exception-data";
         } else {
-            Task task = customResponse.getResponseData();
-            model.addAttribute("task", task);
-            return redirectPath;
+            model.addAttribute("task", customResponse.getResponseData());
+            return viewName;
         }
     }
 
-    private <T> String redirectIfExceptionExist(CustomResponse<T> customResponse, HttpSession session){
-        ExceptionData exceptionData = customResponse.getResponseError();
-        session.setAttribute("exception", exceptionData);
-        return "redirect:/exception-data";
+    private String handleResponse(CustomResponse<?> customResponse, HttpSession session, String redirectUrl) {
+        if (customResponse.getErrorCode() != 0) {
+            session.setAttribute("exception", customResponse.getResponseError());
+            return "redirect:/exception-data";
+        } else {
+            return redirectUrl;
+        }
     }
 }
 

@@ -31,9 +31,7 @@ public class TaskClientApi {
                 .uri("/tasks/user/" + id)
                 .retrieve()
                 .body(String.class);
-        JsonNode jsonNode = objectMapper.readTree(json);
-        CustomResponse<List<Task>> customResponse = objectMapper.convertValue(jsonNode, new TypeReference<CustomResponse<List<Task>>>() {});
-        return customResponse;
+        return deserialization(json, new TypeReference<CustomResponse<List<Task>>>() {});
     }
 
     public CustomResponse<List<Task>> getAllTasks() throws JsonProcessingException {
@@ -42,9 +40,7 @@ public class TaskClientApi {
                 .uri("/tasks")
                 .retrieve()
                 .body(String.class);
-        JsonNode jsonNode = objectMapper.readTree(json);
-        CustomResponse<List<Task>> customResponse = objectMapper.convertValue(jsonNode, new TypeReference<CustomResponse<List<Task>>>() {});
-        return customResponse;
+        return deserialization(json, new TypeReference<CustomResponse<List<Task>>>() {});
     }
 
     public CustomResponse<Task> getTaskById(Long id) throws JsonProcessingException {
@@ -53,9 +49,7 @@ public class TaskClientApi {
                 .uri("/tasks/" + id)
                 .retrieve()
                 .body(String.class);
-        JsonNode jsonNode = objectMapper.readTree(json);
-        CustomResponse<Task> customResponse = objectMapper.convertValue(jsonNode, new TypeReference<CustomResponse<Task>>() {});
-        return customResponse;
+        return deserialization(json, new TypeReference<CustomResponse<Task>>() {});
     }
 
 
@@ -66,9 +60,7 @@ public class TaskClientApi {
                 .body(task)
                 .retrieve()
                 .body(String.class);
-        JsonNode jsonNode = objectMapper.readTree(json);
-        CustomResponse<Task> customResponse = objectMapper.convertValue(jsonNode, new TypeReference<CustomResponse<Task>>() {});
-        return customResponse;
+        return deserialization(json, new TypeReference<CustomResponse<Task>>() {});
     }
 
     public CustomResponse<Task> updateTask(Long id, Task task) throws JsonProcessingException {
@@ -78,9 +70,7 @@ public class TaskClientApi {
                 .body(task)
                 .retrieve()
                 .body(String.class);
-        JsonNode jsonNode = objectMapper.readTree(json);
-        CustomResponse<Task> customResponse = objectMapper.convertValue(jsonNode, new TypeReference<CustomResponse<Task>>() {});
-        return customResponse;
+        return deserialization(json, new TypeReference<CustomResponse<Task>>() {});
     }
 
     public CustomResponse<Task> deleteTask(Long id) throws JsonProcessingException {
@@ -89,8 +79,11 @@ public class TaskClientApi {
                 .uri("/tasks/" + id)
                 .retrieve()
                 .body(String.class);
-        JsonNode jsonNode = objectMapper.readTree(json);
-        CustomResponse<Task> customResponse = objectMapper.convertValue(jsonNode, new TypeReference<CustomResponse<Task>>() {});
-        return customResponse;
+        return deserialization(json, new TypeReference<CustomResponse<Task>>() {});
+    }
+
+    private <T> CustomResponse<T> deserialization(String jsonObject, TypeReference<CustomResponse<T>> responseType) throws JsonProcessingException {
+        JsonNode jsonNode = objectMapper.readTree(jsonObject);
+        return objectMapper.convertValue(jsonNode, responseType);
     }
 }
