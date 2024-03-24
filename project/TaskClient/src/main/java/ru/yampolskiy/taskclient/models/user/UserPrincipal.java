@@ -23,6 +23,9 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public String getPassword() {
+        if (user == null) {
+            return null;
+        }
         return user.getPassword();
     }
 

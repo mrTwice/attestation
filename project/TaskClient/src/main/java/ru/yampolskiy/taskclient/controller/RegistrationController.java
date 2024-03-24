@@ -1,5 +1,6 @@
 package ru.yampolskiy.taskclient.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -25,7 +26,7 @@ public class RegistrationController {
     }
 
     @PostMapping("/register")
-    public String registerUser(User userForm) {
+    public String registerUser(User userForm) throws JsonProcessingException {
         userForm.setPassword(passwordEncoder.encode(userForm.getPassword()));
         userService.registerNewUser(userForm);
         return "redirect:/login";
