@@ -12,10 +12,19 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 import ru.yampolskiy.taskclient.service.UserDetailsServiceImpl;
+
+/**
+ * Конфигурация безопасности приложения.
+ */
 @Configuration
 public class SecurityConfig {
 
-
+    /**
+     * Настройка цепочки фильтров безопасности.
+     * @param http Объект HttpSecurity для настройки безопасности.
+     * @return Цепочка фильтров безопасности.
+     * @throws Exception Если происходит ошибка в процессе настройки.
+     */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -39,6 +48,12 @@ public class SecurityConfig {
         return http.build();
     }
 
+    /**
+     * Создает AuthenticationManager для аутентификации пользователей.
+     * @param userDetailsService Реализация интерфейса UserDetailsService.
+     * @param passwordEncoder Экземпляр PasswordEncoder для шифрования паролей.
+     * @return AuthenticationManager для аутентификации пользователей.
+     */
     @Bean
     public AuthenticationManager authenticationManager(
             UserDetailsServiceImpl userDetailsService,
@@ -50,6 +65,10 @@ public class SecurityConfig {
         return new ProviderManager(authenticationProvider);
     }
 
+    /**
+     * Создает экземпляр PasswordEncoder для шифрования паролей.
+     * @return PasswordEncoder для шифрования паролей.
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

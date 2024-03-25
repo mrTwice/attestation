@@ -19,14 +19,26 @@ public class RegistrationController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    /**
+     * Отображает форму регистрации пользователя.
+     * @param model Модель представления.
+     * @return Шаблон страницы регистрации.
+     */
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
         model.addAttribute("userForm", new User());
         return "registration";
     }
 
+    /**
+     * Обрабатывает данные, отправленные из формы регистрации.
+     * @param userForm Данные нового пользователя.
+     * @return Перенаправление на страницу входа после успешной регистрации.
+     * @throws JsonProcessingException Если возникает ошибка при обработке JSON.
+     */
     @PostMapping("/register")
     public String registerUser(User userForm) throws JsonProcessingException {
+        // Хэшируем пароль перед сохранением
         userForm.setPassword(passwordEncoder.encode(userForm.getPassword()));
         userService.registerNewUser(userForm);
         return "redirect:/login";
