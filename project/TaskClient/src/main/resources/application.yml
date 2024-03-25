@@ -19,3 +19,13 @@ management:
 
 apigateway:
   base-url: "http://localhost:8762/api"
+
+logging:
+  level:
+    root: INFO
+    ru.ru.yampolskiy: ERROR
+  pattern:
+    console: "%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"
+    file: "%d %p %c{1.} [%t] %m%n"
+  file:
+    name: TaskClient.log

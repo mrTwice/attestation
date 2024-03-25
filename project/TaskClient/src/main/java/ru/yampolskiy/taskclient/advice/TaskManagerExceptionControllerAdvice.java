@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import ru.yampolskiy.taskclient.models.ExceptionData;
 
+
 @ControllerAdvice
 public class TaskManagerExceptionControllerAdvice {
     @ExceptionHandler(JsonProcessingException.class)
