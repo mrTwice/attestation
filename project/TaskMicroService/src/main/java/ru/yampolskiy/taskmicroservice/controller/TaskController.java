@@ -16,6 +16,11 @@ public class TaskController {
     @Autowired
     private TaskService taskService;
 
+    /**
+     * Получает список задач пользователя.
+     * @param id Идентификатор пользователя.
+     * @return Список задач пользователя.
+     */
     @GetMapping("/user/{id}")
     public ResponseEntity<CustomResponse<List<Task>>> getUserTasks (@PathVariable Long id){
         List<Task> userTasks = taskService.getAllUserTask(id);
@@ -23,6 +28,10 @@ public class TaskController {
         return ResponseEntity.ok(customResponse);
     }
 
+    /**
+     * Получает список всех задач.
+     * @return Список всех задач.
+     */
     @GetMapping
     public ResponseEntity<CustomResponse<List<Task>>> getAllTasks() {
         List<Task> tasks = taskService.getAllTasks();
@@ -30,6 +39,11 @@ public class TaskController {
         return ResponseEntity.ok(customResponse);
     }
 
+    /**
+     * Получает задачу по идентификатору.
+     * @param id Идентификатор задачи.
+     * @return Задача с указанным идентификатором.
+     */
     @GetMapping("/{id}")
     public ResponseEntity<CustomResponse<Task>> getTaskById(@PathVariable Long id) {
         Task task = taskService.getTaskById(id);
@@ -37,6 +51,11 @@ public class TaskController {
         return ResponseEntity.ok(customResponse);
     }
 
+    /**
+     * Создает новую задачу.
+     * @param task Данные для создания новой задачи.
+     * @return Созданная задача.
+     */
     @PostMapping
     public ResponseEntity<CustomResponse<Task>> createTask(@RequestBody Task task) {
         Task createdTask = taskService.createTask(task);
@@ -44,6 +63,12 @@ public class TaskController {
         return ResponseEntity.ok(customResponse);
     }
 
+    /**
+     * Обновляет существующую задачу.
+     * @param id Идентификатор задачи для обновления.
+     * @param task Данные для обновления задачи.
+     * @return Обновленная задача.
+     */
     @PutMapping("/{id}")
     public ResponseEntity<CustomResponse<Task>> updateTask(@PathVariable Long id, @RequestBody Task task) {
         Task updatedTask = taskService.updateTask(id, task);
@@ -51,6 +76,11 @@ public class TaskController {
         return ResponseEntity.ok(customResponse);
     }
 
+    /**
+     * Удаляет задачу по идентификатору.
+     * @param id Идентификатор задачи для удаления.
+     * @return Ответ об успешном удалении.
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<CustomResponse<Task>> deleteTask(@PathVariable Long id) {
         taskService.deleteTask(id);

@@ -19,7 +19,7 @@ import ru.yampolskiy.taskclient.service.UserService;
 import java.util.List;
 
 /**
- * Контроллер для управления задачами.
+ * Контроллер для управления задачами пользователя.
  */
 @Controller
 public class TaskManagerController {

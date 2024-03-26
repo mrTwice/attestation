@@ -10,9 +10,17 @@ import ru.yampolskiy.usermicroservice.model.CustomResponse;
 import ru.yampolskiy.usermicroservice.model.ExceptionData;
 import ru.yampolskiy.usermicroservice.model.User;
 
+/**
+ * Обработчик исключений для пользовательского микросервиса.
+ */
 @ControllerAdvice
 public class UserMicroserviceExceptionControllerAdvice {
 
+    /**
+     * Обработчик исключения, когда пользователь не найден.
+     * @param e исключение UserNotFoundException
+     * @return ответ с сообщением об ошибке
+     */
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<CustomResponse<User>> handleUserNotFoundException(UserNotFoundException e) {
         ExceptionData exceptionData = new ExceptionData(e.getClass().getPackage().getName(), e.getClass().getSimpleName(), e.getMessage());
@@ -20,6 +28,11 @@ public class UserMicroserviceExceptionControllerAdvice {
         return new ResponseEntity<>(customResponse, HttpStatus.OK);
     }
 
+    /**
+     * Обработчик исключения, когда пользователь уже существует.
+     * @param e исключение UserAlreadyExistsException
+     * @return ответ с сообщением об ошибке
+     */
     @ExceptionHandler(UserAlreadyExistsException.class)
     public ResponseEntity<CustomResponse<User>> handleUserAlreadyExistsException(UserAlreadyExistsException e) {
         ExceptionData exceptionData = new ExceptionData(e.getClass().getPackage().getName(), e.getClass().getSimpleName(), e.getMessage());
@@ -27,6 +40,11 @@ public class UserMicroserviceExceptionControllerAdvice {
         return new ResponseEntity<>(customResponse, HttpStatus.OK);
     }
 
+    /**
+     * Обработчик остальных исключений типа RuntimeException.
+     * @param e исключение RuntimeException
+     * @return ответ с сообщением об ошибке
+     */
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<CustomResponse<User>> handleRuntimeException(RuntimeException e) {
         ExceptionData exceptionData = new ExceptionData(e.getClass().getPackage().getName(), e.getClass().getSimpleName(), e.getMessage());
@@ -34,6 +52,11 @@ public class UserMicroserviceExceptionControllerAdvice {
         return new ResponseEntity<>(customResponse, HttpStatus.OK);
     }
 
+    /**
+     * Обработчик остальных исключений.
+     * @param e исключение Exception
+     * @return ответ с сообщением об ошибке
+     */
     @ExceptionHandler(Exception.class)
     public ResponseEntity<CustomResponse<User>> handleException(Exception e) {
         ExceptionData exceptionData = new ExceptionData(e.getClass().getPackage().getName(), e.getClass().getSimpleName(), e.getMessage());

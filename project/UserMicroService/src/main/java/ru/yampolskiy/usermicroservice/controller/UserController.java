@@ -10,13 +10,21 @@ import ru.yampolskiy.usermicroservice.service.UserService;
 
 import java.util.List;
 
+/**
+ * Контроллер для работы с пользователями.
+ */
 @Data
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
+
     @Autowired
     private UserService userService;
 
+    /**
+     * Получение всех пользователей.
+     * @return ответ с кодом статуса и списком пользователей
+     */
     @GetMapping
     public ResponseEntity<CustomResponse<List<User>>> getAllUsers() {
         List<User> users = userService.getAllUsers();
@@ -24,6 +32,11 @@ public class UserController {
         return ResponseEntity.ok(customResponse);
     }
 
+    /**
+     * Получение пользователя по его идентификатору.
+     * @param id идентификатор пользователя
+     * @return ответ с кодом статуса и данными пользователя
+     */
     @GetMapping("/{id}")
     public ResponseEntity<CustomResponse<User>> getUserById(@PathVariable Long id) {
         User user = userService.getUserById(id);
@@ -31,6 +44,11 @@ public class UserController {
         return ResponseEntity.ok(customResponse);
     }
 
+    /**
+     * Поиск пользователя по его имени пользователя.
+     * @param username имя пользователя
+     * @return ответ с кодом статуса и данными пользователя
+     */
     @GetMapping("/find/{username}")
     public ResponseEntity<CustomResponse<User>> findUserByUsername(@PathVariable String username) {
         User user = userService.findUserByUserName(username);
@@ -38,6 +56,11 @@ public class UserController {
         return ResponseEntity.ok(customResponse);
     }
 
+    /**
+     * Создание нового пользователя.
+     * @param user данные нового пользователя
+     * @return ответ с кодом статуса и данными созданного пользователя
+     */
     @PostMapping
     public ResponseEntity<CustomResponse<User>> createUser(@RequestBody User user) {
         User createdUser = userService.createUser(user);
@@ -45,6 +68,12 @@ public class UserController {
         return ResponseEntity.ok(customResponse);
     }
 
+    /**
+     * Обновление данных пользователя.
+     * @param id идентификатор пользователя
+     * @param user новые данные пользователя
+     * @return ответ с кодом статуса и данными обновленного пользователя
+     */
     @PutMapping("/{id}")
     public ResponseEntity<CustomResponse<User>> updateUser(@PathVariable Long id, @RequestBody User user) {
         User updatedUser = userService.updateUser(id, user);
@@ -52,6 +81,11 @@ public class UserController {
         return ResponseEntity.ok(customResponse);
     }
 
+    /**
+     * Удаление пользователя по его идентификатору.
+     * @param id идентификатор пользователя
+     * @return ответ с кодом статуса
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<CustomResponse<User>> deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
