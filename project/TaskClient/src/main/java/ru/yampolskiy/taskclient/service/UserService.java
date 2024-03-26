@@ -60,7 +60,7 @@ public class UserService {
 
     /**
      * Получает список всех пользователей.
-     * @return Ответ сервера с списком пользователей.
+     * @return Ответ сервера со списком пользователей.
      * @throws JsonProcessingException Если возникает ошибка при обработке JSON.
      */
     public CustomResponse<List<User>> findAllUsers() throws JsonProcessingException {
