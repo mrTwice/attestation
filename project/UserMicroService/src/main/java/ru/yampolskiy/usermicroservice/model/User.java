@@ -3,15 +3,13 @@ package ru.yampolskiy.usermicroservice.model;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Set;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 @JsonSerialize
@@ -30,4 +28,5 @@ public class User {
     @CollectionTable(name ="user_role", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
+
 }

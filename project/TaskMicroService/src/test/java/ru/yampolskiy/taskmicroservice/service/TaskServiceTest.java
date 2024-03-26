@@ -1,22 +1,25 @@
 package ru.yampolskiy.taskmicroservice.service;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.MockitoAnnotations;
+import ru.yampolskiy.taskmicroservice.exception.TaskIdNotNullException;
+import ru.yampolskiy.taskmicroservice.exception.TaskNotFoundException;
 import ru.yampolskiy.taskmicroservice.model.Task;
+import ru.yampolskiy.taskmicroservice.model.TaskStatus;
 import ru.yampolskiy.taskmicroservice.repository.TaskRepository;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
-public class TaskServiceTest {
+class TaskServiceTest {
 
     @Mock
     private TaskRepository taskRepository;
@@ -24,130 +27,122 @@ public class TaskServiceTest {
     @InjectMocks
     private TaskService taskService;
 
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.initMocks(this);
+    }
+
     @Test
-    public void testFindAll_ReturnsListOfTasks() {
-        List<Task> tasks = Collections.singletonList(new Task());
-        when(taskRepository.findAll()).thenReturn(tasks);
+    void testGetAllTasks() {
+        List<Task> taskList = Collections.singletonList(new Task());
+        when(taskRepository.findAll()).thenReturn(taskList);
 
         List<Task> result = taskService.getAllTasks();
 
-        assertThat(result).isEqualTo(tasks);
+        assertEquals(taskList, result);
     }
 
     @Test
-    public void testFindAllByOwnerId_ExistingTasks_ReturnsListOfTasks() {
+    void testGetAllUserTask() {
+        long userId = 1L;
+        List<Task> taskList = Collections.singletonList(new Task());
+        when(taskRepository.findAllByOwnerId(userId)).thenReturn(Optional.of(taskList));
 
-        Long ownerId = 1L;
-        List<Task> tasks = Collections.singletonList(new Task());
-        when(taskRepository.findAllByOwnerId(ownerId)).thenReturn(Optional.of(tasks));
+        List<Task> result = taskService.getAllUserTask(userId);
 
-        List<Task> result = taskService.getAllUserTask(ownerId);
-
-        assertThat(result).isEqualTo(tasks);
+        assertEquals(taskList, result);
     }
 
     @Test
-    public void testFindAllByOwnerId_NoTasks_ReturnsEmptyList() {
+    void testGetAllUserTask_EmptyList() {
+        long userId = 1L;
+        when(taskRepository.findAllByOwnerId(userId)).thenReturn(Optional.empty());
 
-        Long ownerId = 1L;
-        when(taskRepository.findAllByOwnerId(ownerId)).thenReturn(Optional.empty());
+        List<Task> result = taskService.getAllUserTask(userId);
 
-
-        List<Task> result = taskService.getAllUserTask(ownerId);
-
-
-        assertThat(result).isEmpty();
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
     }
 
     @Test
-    public void testFindById_ExistingTask_ReturnsTask() {
-
-        Long taskId = 1L;
+    void testGetTaskById() {
+        long taskId = 1L;
         Task task = new Task();
+        task.setId(taskId);
         when(taskRepository.findById(taskId)).thenReturn(Optional.of(task));
 
         Task result = taskService.getTaskById(taskId);
 
-        assertThat(result).isEqualTo(task);
+        assertEquals(task, result);
     }
 
     @Test
-    public void testFindById_NonExistingTask_ReturnsNull() {
-
-        Long taskId = 1L;
+    void testGetTaskById_TaskNotFoundException() {
+        long taskId = 1L;
         when(taskRepository.findById(taskId)).thenReturn(Optional.empty());
 
-
-        Task result = taskService.getTaskById(taskId);
-
-        assertThat(result).isNull();
+        assertThrows(TaskNotFoundException.class, () -> taskService.getTaskById(taskId));
     }
 
     @Test
-    public void testCreateTask_ValidTask_CreatesTask() {
-
-        Task task = new Task();
-        when(taskRepository.save(task)).thenReturn(task);
+    void testCreateTask() {
+        Task task = new Task(null, "Test", "test", TaskStatus.OPEN, 1L, LocalDateTime.now(), LocalDateTime.now(), LocalDateTime.now());
+        Task task1 = new Task(1L, "Test", "test", TaskStatus.OPEN, 1L, LocalDateTime.now(), LocalDateTime.now(), LocalDateTime.now());
+        when(taskRepository.save(task)).thenReturn(task1);
 
         Task result = taskService.createTask(task);
 
-        assertThat(result).isEqualTo(task);
+        // Проверяем, что созданная задача имеет правильные свойства
+        assertNotNull(result.getId());
+        assertEquals(TaskStatus.OPEN, result.getStatus());
+        assertNotNull(result.getCreated());
+        assertNotNull(result.getLastUpdate());
     }
 
     @Test
-    public void testCreateTask_TaskWithId_ThrowsException() {
-
+    void testCreateTask_TaskIdNotNullException() {
         Task task = new Task();
-        task.setId(1L);
+        task.setId(1L); // Устанавливаем ID, чтобы вызвать исключение
 
-
-        assertThatThrownBy(() -> taskService.createTask(task))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("ID должен быть пустым при создании задачи");
+        assertThrows(TaskIdNotNullException.class, () -> taskService.createTask(task));
     }
 
     @Test
-    public void testUpdateTask_ExistingTask_UpdatesTask() {
-
-        Long taskId = 1L;
+    void testUpdateTask() {
+        long taskId = 1L;
         Task task = new Task();
+        task.setId(taskId);
         when(taskRepository.existsById(taskId)).thenReturn(true);
         when(taskRepository.save(task)).thenReturn(task);
 
         Task result = taskService.updateTask(taskId, task);
 
-        assertThat(result).isEqualTo(task);
+        assertEquals(task, result);
     }
 
     @Test
-    public void testUpdateTask_NonExistingTask_ThrowsException() {
-        Long taskId = 1L;
+    void testUpdateTask_TaskNotFoundException() {
+        long taskId = 1L;
         Task task = new Task();
         when(taskRepository.existsById(taskId)).thenReturn(false);
 
-        assertThatThrownBy(() -> taskService.updateTask(taskId, task))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("Задачи с ID " + taskId + " не существует");
+        assertThrows(TaskNotFoundException.class, () -> taskService.updateTask(taskId, task));
     }
 
     @Test
-    public void testDeleteTask_ExistingTask_DeletesTask() {
-        Long taskId = 1L;
+    void testDeleteTask() {
+        long taskId = 1L;
         when(taskRepository.existsById(taskId)).thenReturn(true);
 
-        taskService.deleteTask(taskId);
-
+        assertDoesNotThrow(() -> taskService.deleteTask(taskId));
         verify(taskRepository, times(1)).deleteById(taskId);
     }
 
     @Test
-    public void testDeleteTask_NonExistingTask_ThrowsException() {
-
-        Long taskId = 1L;
+    void testDeleteTask_TaskNotFoundException() {
+        long taskId = 1L;
         when(taskRepository.existsById(taskId)).thenReturn(false);
 
-        assertThatThrownBy(() -> taskService.deleteTask(taskId))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("Задачи с ID " + taskId + " не существует");
+        assertThrows(TaskNotFoundException.class, () -> taskService.deleteTask(taskId));
     }
 }

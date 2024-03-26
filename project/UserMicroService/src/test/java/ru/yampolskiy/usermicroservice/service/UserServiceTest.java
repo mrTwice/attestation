@@ -2,97 +2,146 @@ package ru.yampolskiy.usermicroservice.service;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import ru.yampolskiy.usermicroservice.model.Role;
+import org.mockito.MockitoAnnotations;
+import ru.yampolskiy.usermicroservice.exception.UserAlreadyExistsException;
+import ru.yampolskiy.usermicroservice.exception.UserNotFoundException;
 import ru.yampolskiy.usermicroservice.model.User;
 import ru.yampolskiy.usermicroservice.repository.UserRepository;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
 class UserServiceTest {
+
     @Mock
     private UserRepository userRepository;
 
     @InjectMocks
     private UserService userService;
 
-    private User testUser;
-
     @BeforeEach
-    public void setUp(){
-        testUser = new User();
-        testUser.setId(1L);
-        testUser.setUsername("petrucho");
-        testUser.setRoles(Collections.singleton(Role.USER));
-        testUser.setPassword("qwerty");
-        testUser.setEmail("petrucho@mail.ru");
-
+    void setUp() {
+        MockitoAnnotations.initMocks(this);
     }
 
     @Test
-    void getAllUsers() {
-        Iterable<User> userList = userRepository.findAll();
-        assertThat(userList).isEmpty();
+    void testGetAllUsers() {
+        List<User> userList = Collections.singletonList(new User());
+        when(userRepository.findAll()).thenReturn(userList);
 
+        List<User> result = userService.getAllUsers();
+
+        assertEquals(userList, result);
     }
 
     @Test
-    void getUserById() {
-        when(userRepository.findById(1L)).thenReturn(Optional.of(testUser));
-        User user = userService.getUserById(1L);
-        assertThat(user).isEqualTo(testUser);
+    void testGetUserById() {
+        long userId = 1L;
+        User user = new User();
+        user.setId(userId);
+        Optional<User> optionalUser = Optional.of(user);
+        when(userRepository.findById(userId)).thenReturn(optionalUser);
 
+        User result = userService.getUserById(userId);
+
+        assertEquals(user, result);
     }
 
     @Test
-    void findUserByUserName() {
-        when(userRepository.findUserByUsername("petrucho")).thenReturn(Optional.of(testUser));
-        User user = userService.findUserByUserName("petrucho");
-        assertThat(user).isEqualTo(testUser);
+    void testGetUserById_UserNotFoundException() {
+        long userId = 1L;
+        when(userRepository.findById(userId)).thenReturn(Optional.empty());
+
+        assertThrows(UserNotFoundException.class, () -> userService.getUserById(userId));
     }
 
     @Test
-    void createUser() {
-        when(userRepository.save(any(User.class))).thenReturn(testUser);
-        User user = userService.createUser(testUser);
-        assertThat(user).isEqualTo(testUser);
-        verify(userRepository, times(1)).save(any(User.class));
+    void testFindUserByUserName() {
+        String username = "testUser";
+        User user = new User();
+        user.setUsername(username);
+        Optional<User> optionalUser = Optional.of(user);
+        when(userRepository.findUserByUsername(username)).thenReturn(optionalUser);
 
+        User result = userService.findUserByUserName(username);
 
+        assertEquals(user, result);
     }
 
     @Test
-    void updateUser() {
+    void testFindUserByUserName_UserNotFoundException() {
+        String username = "nonexistentUser";
+        when(userRepository.findUserByUsername(username)).thenReturn(Optional.empty());
 
-        when(userRepository.existsById(testUser.getId())).thenReturn(true);
-        when(userRepository.save(any(User.class))).thenReturn(testUser);
-
-        User updatedUser = userService.updateUser(testUser.getId(), testUser);
-        assertThat(updatedUser).isNotNull();
-        assertThat(updatedUser.getUsername()).isEqualTo(testUser.getUsername());
-        assertThat(updatedUser.getPassword()).isEqualTo(testUser.getPassword());
-
-        verify(userRepository, times(1)).existsById(testUser.getId());
-        verify(userRepository, times(1)).save(any(User.class));
-
-
+        assertThrows(UserNotFoundException.class, () -> userService.findUserByUserName(username));
     }
 
     @Test
-    void deleteUser() {
-        when(userRepository.existsById(testUser.getId())).thenReturn(true);
-        userService.deleteUser(testUser.getId());
-        verify(userRepository, times(1)).existsById(testUser.getId());
-        verify(userRepository, times(1)).deleteById(testUser.getId());
+    void testCreateUser() {
+        User user = new User();
+        user.setUsername("testUser");
+        when(userRepository.existsUserByUsername(user.getUsername())).thenReturn(false);
+        when(userRepository.save(user)).thenReturn(user);
+
+        User result = userService.createUser(user);
+
+        assertNotNull(result);
+        assertEquals(user.getUsername(), result.getUsername());
     }
 
+    @Test
+    void testCreateUser_UserAlreadyExistsException() {
+        User user = new User();
+        user.setUsername("existingUser");
+        when(userRepository.existsUserByUsername(user.getUsername())).thenReturn(true);
+
+        assertThrows(UserAlreadyExistsException.class, () -> userService.createUser(user));
+    }
+
+    @Test
+    void testUpdateUser() {
+        long userId = 1L;
+        User user = new User();
+        user.setId(userId);
+        when(userRepository.existsById(userId)).thenReturn(true);
+        when(userRepository.save(user)).thenReturn(user);
+
+        User result = userService.updateUser(userId, user);
+
+        assertNotNull(result);
+        assertEquals(userId, result.getId());
+    }
+
+    @Test
+    void testUpdateUser_UserNotFoundException() {
+        long userId = 1L;
+        User user = new User();
+        user.setId(userId);
+        when(userRepository.existsById(userId)).thenReturn(false);
+
+        assertThrows(UserNotFoundException.class, () -> userService.updateUser(userId, user));
+    }
+
+    @Test
+    void testDeleteUser() {
+        long userId = 1L;
+        when(userRepository.existsById(userId)).thenReturn(true);
+
+        assertDoesNotThrow(() -> userService.deleteUser(userId));
+        verify(userRepository, times(1)).deleteUserById(userId);
+    }
+
+    @Test
+    void testDeleteUser_UserNotFoundException() {
+        long userId = 1L;
+        when(userRepository.existsById(userId)).thenReturn(false);
+
+        assertThrows(UserNotFoundException.class, () -> userService.deleteUser(userId));
+    }
 }

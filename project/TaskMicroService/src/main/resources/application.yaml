@@ -7,11 +7,12 @@ spring:
     open-in-view: false
     hibernate:
       ddl-auto: update
-    datasource:
-      url: jdbc:mysql://localhost:3308/TaskService
-      driver-class-name: com.mysql.cj.jdbc.Driver
-      username: User
-      password: Password
+  datasource:
+    url: jdbc:mysql://localhost:3308/TaskService
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: User
+    password: Password
+
 
 eureka:
   client:
