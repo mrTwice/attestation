@@ -3,14 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <title>Edit Task</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            width: 300px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: calc(100% - 12px);
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            border: none;
+            border-radius: 3px;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        p {
+            margin-top: 10px;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
-<h1>Edit Task</h1>
+<div class="container">
 <form th:action="@{/tasks/{id}/edit(id=${task.id})}" method="post">
     <input type="hidden" th:name="_method" value="put"/>
     <label>
         ID: <br/>
-        <input readonly="readonly" type="text" th:field="${task.id}"/>
+        <input readonly="readonly" type="text" th:field="${task.id}" />
     </label>
     <br/>
     <label>
@@ -48,7 +99,8 @@
     </label>
     <br/>
     <button type="submit">Save</button>
+    <p><a href="/tasks">Cancel</a></p>
 </form>
-<a href="/tasks">Cancel</a>
+</div>
 </body>
 </html>

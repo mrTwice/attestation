@@ -1,5 +1,6 @@
 package ru.yampolskiy.taskclient.config;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,6 +13,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 import ru.yampolskiy.taskclient.service.UserDetailsServiceImpl;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 
 /**
  * Конфигурация безопасности приложения.
@@ -30,6 +33,7 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers("/register").permitAll()
+                        .requestMatchers("/exception-data").permitAll()
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults())
@@ -37,6 +41,7 @@ public class SecurityConfig {
                         .loginPage("/login")
                         .defaultSuccessUrl("/tasks", true) // <- Редирект на /tasks после успешного входа
                         .permitAll()
+
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
@@ -47,6 +52,7 @@ public class SecurityConfig {
 
         return http.build();
     }
+
 
     /**
      * Создает AuthenticationManager для аутентификации пользователей.

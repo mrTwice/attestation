@@ -1,0 +1,80 @@
+version: '3'
+services:
+
+  #UsersDB
+  usersdb:
+    image: mysql:latest
+    container_name: UserMicroService
+    env_file:
+      - ./Homework_09_users.env
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./umsDB:/var/lib/mysql
+
+  #TasksDB
+  tasksdb:
+    image: mysql:latest
+    container_name: TaskMicroService
+    env_file:
+      - ./Homework_09_tasks.env
+    ports:
+      - "3308:3306"
+    volumes:
+      - ./tmsDB:/var/lib/mysql
+
+      
+  #Eureka
+  eureka:
+    build: ./EurekaServer
+    ports:
+      - "8761:8761"
+    depends_on:
+      - usersdb
+      - tasksdb
+
+  #ApiGateWay
+  gateway:
+    build: ./ApiGateWay
+    ports:
+      - "8762:8762"
+    depends_on:
+      - eureka
+      - usersdb
+      - tasksdb
+
+  #UserService
+  ums:
+    build: ./UserMicroService
+    ports:
+      - "8080:8080"
+    depends_on:
+      - eureka
+      - gateway
+      - usersdb
+      - tasksdb
+
+  #TaskService
+  tms:
+    build: ./TaskMicroService
+    ports:
+      - "8081:8081"
+    depends_on:
+      - eureka
+      - gateway
+      - usersdb
+      - tasksdb
+      - ums
+
+  #TaskClient
+  taskclient:
+    build: ./TaskClient
+    ports:
+      - "8083:8083"
+    depends_on:
+      - eureka
+      - gateway
+      - tms
+      - ums
+      - usersdb
+      - tasksdb

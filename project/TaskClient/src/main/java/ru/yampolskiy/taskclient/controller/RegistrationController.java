@@ -1,6 +1,7 @@
 package ru.yampolskiy.taskclient.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -37,7 +38,7 @@ public class RegistrationController {
      * @throws JsonProcessingException Если возникает ошибка при обработке JSON.
      */
     @PostMapping("/register")
-    public String registerUser(User userForm) throws JsonProcessingException {
+    public String registerUser(@Valid User userForm) throws JsonProcessingException {
         // Хэшируем пароль перед сохранением
         userForm.setPassword(passwordEncoder.encode(userForm.getPassword()));
         userService.registerNewUser(userForm);

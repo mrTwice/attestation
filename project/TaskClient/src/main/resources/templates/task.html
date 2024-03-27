@@ -3,16 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <title>Task Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            width: 300px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: calc(100% - 12px);
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            border: none;
+            border-radius: 3px;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        p {
+            margin-top: 10px;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
-<h1>Task Details</h1>
-<p>ID: <span th:text="${task.id}"></span></p>
-<p>Title: <span th:text="${task.title}"></span></p>
-<p>Description: <span th:text="${task.description}"></span></p>
-<a href="/tasks">Back to Tasks</a><br> <br>
-
+<div class="container">
+<p>ID: <span th:text="${task.id}"></span></p> <br>
+<p>Title: <span th:text="${task.title}"></span></p><br>
+<p>Description: <span th:text="${task.description}"></span></p><br>
+    <p><a href="/tasks" style="text-decoration: none;">Back to Tasks</a></p>
+</div>
 <form th:action="@{/logout}" method="post">
     <button type="submit">Выйти</button>
 </form>
 </body>
 </html>
+

@@ -1,5 +1,7 @@
 package ru.yampolskiy.usermicroservice.controller;
 
+
+import jakarta.validation.Valid;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -62,7 +64,7 @@ public class UserController {
      * @return ответ с кодом статуса и данными созданного пользователя
      */
     @PostMapping
-    public ResponseEntity<CustomResponse<User>> createUser(@RequestBody User user) {
+    public ResponseEntity<CustomResponse<User>> createUser(@Valid @RequestBody User user) {
         User createdUser = userService.createUser(user);
         CustomResponse<User> customResponse = new CustomResponse<>(0, createdUser);
         return ResponseEntity.ok(customResponse);
@@ -75,7 +77,7 @@ public class UserController {
      * @return ответ с кодом статуса и данными обновленного пользователя
      */
     @PutMapping("/{id}")
-    public ResponseEntity<CustomResponse<User>> updateUser(@PathVariable Long id, @RequestBody User user) {
+    public ResponseEntity<CustomResponse<User>> updateUser(@PathVariable Long id, @Valid @RequestBody User user) {
         User updatedUser = userService.updateUser(id, user);
         CustomResponse<User> customResponse = new CustomResponse<>(0, updatedUser);
         return ResponseEntity.ok(customResponse);

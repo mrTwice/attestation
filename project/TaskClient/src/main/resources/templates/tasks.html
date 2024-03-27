@@ -3,15 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <title>Tasks</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar {
+            background-color: #ffffff;
+            padding: 10px 0;
+            text-align: center;
+            color: #fff;
+        }
+
+        .navbar a {
+            text-decoration: none;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 3px;
+            margin-right: 5px;
+            background-color: transparent;
+        }
+
+        .navbar a:hover {
+            background-color: #0056b3;
+        }
+
+        .logout-form {
+            display: inline-block;
+        }
+
+        .logout-form button {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 3px;
+            background-color: #dc3545;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .logout-form button:hover {
+            background-color: #c82333;
+
+        }.create-form {
+            display: inline-block;
+        }
+
+        .create-form button {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 3px;
+            background-color: #2b6b08;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .create-form button:hover {
+            background-color: #2b6b08;
+        }
+
+        table {
+            width: 80%;
+            border-collapse: collapse;
+            margin: 20px auto;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .action-buttons a, .action-buttons button {
+            display: block;
+            margin-bottom: 5px;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .action-buttons a:hover, .action-buttons button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
-<h1>Tasks</h1>
+<div class="navbar">
+    <form th:action="@{/tasks/new}" method="get" class="create-form">
+        <button type="submit">Создать задачу</button>
+    </form>
+    <form th:action="@{/logout}" method="post" class="logout-form">
+        <button type="submit">Выйти</button>
+    </form>
+</div>
+
 <table>
     <thead>
     <tr>
         <th>ID</th>
         <th>Title</th>
         <th>Description</th>
+        <th>Status</th>
+        <th>Created</th>
         <th>Action</th>
     </tr>
     </thead>
@@ -20,9 +128,15 @@
         <td th:text="${task.id}"></td>
         <td th:text="${task.title}"></td>
         <td th:text="${task.description}"></td>
-        <td>
-            <a th:href="@{/tasks/{id}(id=${task.id})}">View</a>
-            <a th:href="@{/tasks/{id}/edit(id=${task.id})}">Edit</a>
+        <td th:text="${task.status}"></td>
+        <td th:text="${task.created}"></td>
+        <td class="action-buttons">
+            <form th:action="@{/tasks/{id}(id=${task.id})}" method="get">
+                <button type="submit">View</button>
+            </form>
+            <form th:action="@{/tasks/{id}/edit(id=${task.id})}" method="get">
+                <button type="submit">Edit</button>
+            </form>
             <form th:action="@{/tasks/{id}/delete(id=${task.id})}" method="post">
                 <button type="submit">Delete</button>
             </form>
@@ -30,10 +144,5 @@
     </tr>
     </tbody>
 </table>
-<a href="/tasks/new">Create New Task</a> <br> <br>
-
-<form th:action="@{/logout}" method="post">
-    <button type="submit">Выйти</button>
-</form>
 </body>
 </html>
