@@ -6,8 +6,8 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka/
-      #defaultZone: http://eureka:8761/eureka/
+      #defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://eureka:8761/eureka/
 
 management:
   endpoint:
@@ -19,8 +19,8 @@ management:
         include: metrics,prometheus,health
 
 apigateway:
-  base-url: "http://localhost:8762/api"
-  #base-url: "http://gateway:8762/api"
+  #base-url: "http://localhost:8762/api"
+  base-url: "http://gateway:8762/api"
 
 logging:
   level:

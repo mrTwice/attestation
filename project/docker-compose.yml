@@ -6,24 +6,26 @@ services:
     image: mysql:latest
     container_name: UserMicroService
     env_file:
-      - ./Homework_09_users.env
+      - ./ums.env
     ports:
       - "3307:3306"
     volumes:
       - ./umsDB:/var/lib/mysql
+    restart: unless-stopped
 
   #TasksDB
   tasksdb:
     image: mysql:latest
     container_name: TaskMicroService
     env_file:
-      - ./Homework_09_tasks.env
+      - ./tms.env
     ports:
       - "3308:3306"
     volumes:
       - ./tmsDB:/var/lib/mysql
+    restart: unless-stopped
 
-      
+
   #Eureka
   eureka:
     build: ./EurekaServer
@@ -32,6 +34,7 @@ services:
     depends_on:
       - usersdb
       - tasksdb
+    restart: unless-stopped
 
   #ApiGateWay
   gateway:
@@ -42,6 +45,7 @@ services:
       - eureka
       - usersdb
       - tasksdb
+    restart: unless-stopped
 
   #UserService
   ums:
@@ -53,6 +57,7 @@ services:
       - gateway
       - usersdb
       - tasksdb
+    restart: unless-stopped
 
   #TaskService
   tms:
@@ -65,6 +70,7 @@ services:
       - usersdb
       - tasksdb
       - ums
+    restart: unless-stopped
 
   #TaskClient
   taskclient:
@@ -78,3 +84,4 @@ services:
       - ums
       - usersdb
       - tasksdb
+    restart: unless-stopped

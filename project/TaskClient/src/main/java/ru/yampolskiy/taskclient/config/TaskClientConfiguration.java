@@ -1,5 +1,5 @@
 package ru.yampolskiy.taskclient.config;
-
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestClientCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +11,9 @@ import org.springframework.web.client.RestClient;
  */
 @Configuration
 public class TaskClientConfiguration {
+
+    @Value("${apigateway.base-url}")
+    private String baseUrl;
 
     /**
      * Создает экземпляр RestClient.
@@ -28,8 +31,6 @@ public class TaskClientConfiguration {
      */
     @Bean
     public RestClientCustomizer restClientCustomizer() {
-        // Базовый URL для всех запросов
-        String baseUrl = "http://localhost:8762/api/";
         // Возвращает функцию для настройки RestClientBuilder
         return (restClientBuilder) -> restClientBuilder
                 // Использует JdkClientHttpRequestFactory для создания HTTP-запросов

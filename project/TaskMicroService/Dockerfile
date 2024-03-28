@@ -9,7 +9,8 @@ RUN mvn dependency:go-offline
 
 # Копируем исходные файлы и собираем приложение
 COPY src ./src
-RUN mvn clean package -DskipTests=true
+#RUN mvn clean package -DskipTests=true
+RUN mvn clean package
 
 # Этап создания образа
 FROM openjdk:23-oracle
