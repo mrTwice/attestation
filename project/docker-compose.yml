@@ -10,7 +10,7 @@ services:
     ports:
       - "3307:3306"
     volumes:
-      - ./umsDB:/var/lib/mysql
+      - ./databases/umsDB:/var/lib/mysql
     restart: unless-stopped
 
   #TasksDB
@@ -22,7 +22,7 @@ services:
     ports:
       - "3308:3306"
     volumes:
-      - ./tmsDB:/var/lib/mysql
+      - ./databases/tmsDB:/var/lib/mysql
     restart: unless-stopped
 
 
