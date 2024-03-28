@@ -31,6 +31,9 @@ public class TaskClientConfiguration {
      */
     @Bean
     public RestClientCustomizer restClientCustomizer() {
+        System.out.println("********************************************");
+        System.out.println(baseUrl);
+        System.out.println("********************************************");
         // Возвращает функцию для настройки RestClientBuilder
         return (restClientBuilder) -> restClientBuilder
                 // Использует JdkClientHttpRequestFactory для создания HTTP-запросов
