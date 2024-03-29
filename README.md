@@ -1,6 +1,23 @@
 # О проекте
 
-Проект создан как и итоговая работа для прохождения курса GeekBrains "Разработчик Java. Цифровые профессии". Цель - закрепление пройденного материала.
+Проект создан как и итоговая работа для прохождения курса GeekBrains "Разработчик Java. Цифровые профессии". Цель - закрепление пройденного материала. Разрабатывался с оглядкой на микросервисную архитектуру. Реализовывает минимальный функционал менеджера задач.
+
+# Текущие функциональные возможности
+
+  - регистрация пользователя в сервисе
+  - авторизация пользователя
+  - получение всего списка задач пользователя
+  - создание задачи
+  - редактирование задачи
+  - просмотр задачи
+  - удаление задачи
+  - логирование всех обращений к основным контроллерам
+
+
+# Основа для расширения функционала
+
+  - Управление пользователями сервиса
+  - Управление правами пользователей
 
 
 # Используемые Технологии
@@ -39,27 +56,30 @@
 
 17. **Spring Integration**: Зависимость [`spring-boot-starter-integration`](https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-integration) предоставляет интеграцию с Spring Integration, которая используется для построения сложных интеграционных сценариев в приложении.
 
-18. **СУБД MySQL**: Система управления базами данных [MySQL](https://www.mysql.com) предоставляет функционал для работы с базами данных.
+18. **Thymeleaf**: Зависимость [`spring-boot-starter-thymeleaf`](https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-thymeleaf) используется для работы
 
-19. **Docker Desktop**: [Docker Desktop](https://www.docker.com/products/docker-desktop/) графический интерфейс для управления контейнерами, изоляцией приложений и ресурсами, включает в себя: Docker Engine, Docker CLI (Command Line Interface), Docker Compose, Docker Kubernetes, Docker App, Docker Dashboard, Docker Machine, Docker Registry.
+19. **СУБД MySQL**: Система управления базами данных [MySQL](https://www.mysql.com) предоставляет функционал для работы с базами данных.
 
-20. **Apache Maven**: [Apache Maven](https://maven.apache.org/) используется для управления проектом и сборкой.
+20. **Docker Desktop**: [Docker Desktop](https://www.docker.com/products/docker-desktop/) графический интерфейс для управления контейнерами, изоляцией приложений и ресурсами, включает в себя: Docker Engine, Docker CLI (Command Line Interface), Docker Compose, Docker Kubernetes, Docker App, Docker Dashboard, Docker Machine, Docker Registry.
 
-21. **IntelliJ IDEA**: Интегрированная среда разработки [IntelliJ IDEA](https://www.jetbrains.com/ru-ru/idea/).
+21. **Apache Maven**: [Apache Maven](https://maven.apache.org/) используется для управления проектом и сборкой.
+
+22. **IntelliJ IDEA**: Интегрированная среда разработки [IntelliJ IDEA](https://www.jetbrains.com/ru-ru/idea/).
 
 # Запуск и сборка проекта
 
 * Разработка велась в IntelliJ IDEA версии Ultimate. Функционал которой позволяет работать с Docker непосредственно из среды разработки. В случае запуска проекта в среде разработки может потребовать запустить контейнеры с базами данных самостоятельно.
 
 * В для работы над проектом , его сборки и деплоя с целью упрощения работы использовались разные переменные среды.
-    * для успешной сборки проекта в среда необходимо установить в конфигурации запуска профиль
+    * для успешной сборки проекта в среде необходимо установить в конфигурации запуска профиль
 
-            SPRING_PROFILES_ACTIVE=dev
+          SPRING_PROFILES_ACTIVE=dev
+
     * Во время сборки проекта используется
 
           SPRING_PROFILES_ACTIVE=prod
 
-* Для запуска контейнерезированной версии приложения необходимо выполнить команду
+* Для запуска контейнерезированной версии приложения, находясь в директории /project, необходимо выполнить команду
 
       docker-compose up -d
 
