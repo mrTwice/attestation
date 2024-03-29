@@ -3,7 +3,7 @@ version: '3'
 services:
   UsersDB:
     image: mysql:latest
-    container_name: UserMicroService
+    #container_name: ums
     env_file:
       - ./Homework_09_users.env
     ports:
