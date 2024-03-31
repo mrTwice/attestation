@@ -118,7 +118,9 @@ public class TaskClientApi {
         return deserialization(json, new TypeReference<CustomResponse<Task>>() {});
     }
 
-    private <T> CustomResponse<T> deserialization(String jsonObject, TypeReference<CustomResponse<T>> responseType) throws JsonProcessingException {
+    private <T> CustomResponse<T> deserialization(
+            String jsonObject,
+            TypeReference<CustomResponse<T>> responseType) throws JsonProcessingException {
         JsonNode jsonNode = objectMapper.readTree(jsonObject);
         return objectMapper.convertValue(jsonNode, responseType);
     }

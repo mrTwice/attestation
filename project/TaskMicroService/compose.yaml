@@ -5,7 +5,7 @@ services:
     image: mysql:latest
     #container_name: tms
     env_file:
-      - ./Homework_09_tasks.env
+      - tasks.env
     ports:
       - "3308:3306"
     volumes:

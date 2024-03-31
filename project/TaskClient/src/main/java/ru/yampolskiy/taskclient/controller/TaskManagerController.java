@@ -54,7 +54,9 @@ public class TaskManagerController {
      * @throws JsonProcessingException Если возникает ошибка при обработке JSON.
      */
     @GetMapping("/tasks/{id}")
-    public String getTaskById(@PathVariable Long id, Model model, HttpSession session) throws JsonProcessingException {
+    public String getTaskById(
+            @PathVariable Long id,
+            Model model, HttpSession session) throws JsonProcessingException {
         CustomResponse<Task> customResponse = taskService.findTaskById(id);
         return handleResponse(customResponse, model, "task", session);
     }
@@ -79,7 +81,10 @@ public class TaskManagerController {
      * @throws JsonProcessingException Если возникает ошибка при обработке JSON.
      */
     @PostMapping("/tasks")
-    public String createTask(@ModelAttribute Task task, HttpSession session, Authentication authentication) throws JsonProcessingException {
+    public String createTask(
+            @ModelAttribute Task task,
+            HttpSession session,
+            Authentication authentication) throws JsonProcessingException {
         User currentUser = getCurrentUser(authentication);
         task.setOwnerId(currentUser.getId());
         CustomResponse<Task> customResponse = taskService.createNewTask(task);
@@ -95,7 +100,9 @@ public class TaskManagerController {
      * @throws JsonProcessingException Если возникает ошибка при обработке JSON.
      */
     @GetMapping("/tasks/{id}/edit")
-    public String editTaskForm(@PathVariable Long id, Model model, HttpSession session) throws JsonProcessingException {
+    public String editTaskForm(
+            @PathVariable Long id,
+            Model model, HttpSession session) throws JsonProcessingException {
         CustomResponse<Task> customResponse = taskService.findTaskById(id);
         return handleResponse(customResponse, model, "editTask", session);
     }
@@ -109,7 +116,9 @@ public class TaskManagerController {
      * @throws JsonProcessingException Если возникает ошибка при обработке JSON.
      */
     @PostMapping("/tasks/{id}/edit")
-    public String updateTask(@PathVariable Long id, @ModelAttribute Task task, HttpSession session) throws JsonProcessingException {
+    public String updateTask(
+            @PathVariable Long id,
+            @ModelAttribute Task task, HttpSession session) throws JsonProcessingException {
         CustomResponse<Task> customResponse = taskService.updateTask(id, task);
         return handleResponse(customResponse, session, "redirect:/tasks");
     }
@@ -145,7 +154,8 @@ public class TaskManagerController {
      * @param session Сессия HTTP.
      * @return Представление для отображения.
      */
-    private String handleResponse(CustomResponse<?> customResponse, Model model, String viewName, HttpSession session) {
+    private String handleResponse(
+            CustomResponse<?> customResponse, Model model, String viewName, HttpSession session) {
         if (customResponse.getErrorCode() != 0) {
             session.setAttribute("exception", customResponse.getResponseError());
             return "redirect:/exception-data";

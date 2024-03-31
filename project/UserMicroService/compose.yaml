@@ -5,7 +5,7 @@ services:
     image: mysql:latest
     #container_name: ums
     env_file:
-      - ./Homework_09_users.env
+      - users.env
     ports:
       - "3307:3306"
     volumes:

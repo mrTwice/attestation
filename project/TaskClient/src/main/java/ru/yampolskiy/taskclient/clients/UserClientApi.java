@@ -124,7 +124,9 @@ public class UserClientApi {
      * @return Объект типа CustomResponse, полученный после десериализации.
      * @throws JsonProcessingException Если возникает ошибка при обработке JSON.
      */
-    private <T> CustomResponse<T> deserialization(String jsonObject, TypeReference<CustomResponse<T>> responseType) throws JsonProcessingException {
+    private <T> CustomResponse<T> deserialization(
+            String jsonObject,
+            TypeReference<CustomResponse<T>> responseType) throws JsonProcessingException {
         JsonNode jsonNode = objectMapper.readTree(jsonObject);
         return objectMapper.convertValue(jsonNode, responseType);
     }
