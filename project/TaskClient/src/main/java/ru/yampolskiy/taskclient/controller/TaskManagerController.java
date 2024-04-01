@@ -32,7 +32,8 @@ public class TaskManagerController {
 
     /**
      * Получает все задачи пользователя.
-     * @param model Модель представления.
+     *
+     * @param model          Модель представления.
      * @param authentication Аутентификация пользователя.
      * @return Страница со всеми задачами пользователя.
      * @throws JsonProcessingException Если возникает ошибка при обработке JSON.
@@ -47,8 +48,9 @@ public class TaskManagerController {
 
     /**
      * Получает задачу по ее идентификатору.
-     * @param id Идентификатор задачи.
-     * @param model Модель представления.
+     *
+     * @param id      Идентификатор задачи.
+     * @param model   Модель представления.
      * @param session Сессия HTTP.
      * @return Страница с информацией о задаче.
      * @throws JsonProcessingException Если возникает ошибка при обработке JSON.
@@ -63,6 +65,7 @@ public class TaskManagerController {
 
     /**
      * Возвращает форму для создания новой задачи.
+     *
      * @param model Модель представления.
      * @return Форма создания новой задачи.
      */
@@ -74,8 +77,9 @@ public class TaskManagerController {
 
     /**
      * Создает новую задачу.
-     * @param task Новая задача для создания.
-     * @param session Сессия HTTP.
+     *
+     * @param task           Новая задача для создания.
+     * @param session        Сессия HTTP.
      * @param authentication Аутентификация пользователя.
      * @return Перенаправление на страницу с задачами после создания.
      * @throws JsonProcessingException Если возникает ошибка при обработке JSON.
@@ -93,8 +97,9 @@ public class TaskManagerController {
 
     /**
      * Возвращает форму для редактирования задачи.
-     * @param id Идентификатор задачи.
-     * @param model Модель представления.
+     *
+     * @param id      Идентификатор задачи.
+     * @param model   Модель представления.
      * @param session Сессия HTTP.
      * @return Форма редактирования задачи.
      * @throws JsonProcessingException Если возникает ошибка при обработке JSON.
@@ -109,8 +114,9 @@ public class TaskManagerController {
 
     /**
      * Обновляет задачу.
-     * @param id Идентификатор задачи.
-     * @param task Данные для обновления задачи.
+     *
+     * @param id      Идентификатор задачи.
+     * @param task    Данные для обновления задачи.
      * @param session Сессия HTTP.
      * @return Перенаправление на страницу с задачами после обновления.
      * @throws JsonProcessingException Если возникает ошибка при обработке JSON.
@@ -125,7 +131,8 @@ public class TaskManagerController {
 
     /**
      * Удаляет задачу.
-     * @param id Идентификатор задачи.
+     *
+     * @param id      Идентификатор задачи.
      * @param session Сессия HTTP.
      * @return Перенаправление на страницу с задачами после удаления.
      * @throws JsonProcessingException Если возникает ошибка при обработке JSON.
@@ -138,6 +145,7 @@ public class TaskManagerController {
 
     /**
      * Получает текущего пользователя.
+     *
      * @param authentication Аутентификация пользователя.
      * @return Текущий пользователь.
      * @throws JsonProcessingException Если возникает ошибка при обработке JSON.
@@ -148,10 +156,11 @@ public class TaskManagerController {
 
     /**
      * Обрабатывает ответ от сервера.
+     *
      * @param customResponse Ответ сервера.
-     * @param model Модель представления.
-     * @param viewName Имя представления.
-     * @param session Сессия HTTP.
+     * @param model          Модель представления.
+     * @param viewName       Имя представления.
+     * @param session        Сессия HTTP.
      * @return Представление для отображения.
      */
     private String handleResponse(
@@ -165,20 +174,21 @@ public class TaskManagerController {
         }
     }
 
-/**
- * Обрабатывает ответ от сервера и возвращает перенаправление.
- * @param customResponse Ответ сервера.
- * @param session Сессия HTTP.
- * @param redirectUrl URL для перенаправления.
- * @return Перенаправление на
- *         указанный URL.
- */
-private String handleResponse(CustomResponse<?> customResponse, HttpSession session, String redirectUrl) {
-    if (customResponse.getErrorCode() != 0) {
-        session.setAttribute("exception", customResponse.getResponseError());
-        return "redirect:/exception-data";
-    } else {
-        return redirectUrl;
+    /**
+     * Обрабатывает ответ от сервера и возвращает перенаправление.
+     *
+     * @param customResponse Ответ сервера.
+     * @param session        Сессия HTTP.
+     * @param redirectUrl    URL для перенаправления.
+     * @return Перенаправление на
+     * указанный URL.
+     */
+    private String handleResponse(CustomResponse<?> customResponse, HttpSession session, String redirectUrl) {
+        if (customResponse.getErrorCode() != 0) {
+            session.setAttribute("exception", customResponse.getResponseError());
+            return "redirect:/exception-data";
+        } else {
+            return redirectUrl;
+        }
     }
-}
 }

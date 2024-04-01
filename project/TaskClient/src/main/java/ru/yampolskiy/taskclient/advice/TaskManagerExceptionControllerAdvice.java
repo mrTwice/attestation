@@ -22,7 +22,9 @@ public class TaskManagerExceptionControllerAdvice {
      */
     @ExceptionHandler(UsernameNotFoundException.class)
     public String handleUsernameNotFoundException(UsernameNotFoundException e, HttpSession session) {
-        session.setAttribute("exception", new ExceptionData(e.getClass().getPackage().getName(), e.getClass().getSimpleName(), e.getMessage()));
+        session.setAttribute("exception", new ExceptionData(
+                e.getClass().getPackage().getName(), e.getClass().getSimpleName(), e.getMessage())
+        );
         return "redirect:/exception-data";
     }
 
@@ -34,7 +36,9 @@ public class TaskManagerExceptionControllerAdvice {
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public String handleValidationExceptions(MethodArgumentNotValidException e, HttpSession session) {
-        session.setAttribute("exception", new ExceptionData(e.getClass().getPackage().getName(), e.getClass().getSimpleName(), e.getMessage()));
+        session.setAttribute("exception", new ExceptionData(
+                e.getClass().getPackage().getName(), e.getClass().getSimpleName(), e.getMessage())
+        );
         return "redirect:/exception-data";
     }
 
@@ -46,7 +50,9 @@ public class TaskManagerExceptionControllerAdvice {
      */
     @ExceptionHandler(JsonProcessingException.class)
     public String handleJsonProcessingException(JsonProcessingException e, HttpSession session) {
-        session.setAttribute("exception", new ExceptionData(e.getClass().getPackage().getName(), e.getClass().getSimpleName(), e.getMessage()));
+        session.setAttribute("exception", new ExceptionData(
+                e.getClass().getPackage().getName(), e.getClass().getSimpleName(), e.getMessage())
+        );
         return "redirect:/exception-data";
     }
 
@@ -58,7 +64,9 @@ public class TaskManagerExceptionControllerAdvice {
      */
     @ExceptionHandler(RuntimeException.class)
     public String handleRuntimeException(RuntimeException e, HttpSession session) {
-        session.setAttribute("exception", new ExceptionData(e.getClass().getPackage().getName(), e.getClass().getSimpleName(), e.getMessage()));
+        session.setAttribute("exception", new ExceptionData(
+                e.getClass().getPackage().getName(), e.getClass().getSimpleName(), e.getMessage())
+        );
         return "redirect:/exception-data";
     }
 
@@ -70,7 +78,9 @@ public class TaskManagerExceptionControllerAdvice {
      */
     @ExceptionHandler(Exception.class)
     public String handleException(Exception e, HttpSession session) {
-        session.setAttribute("exception", new ExceptionData(e.getClass().getPackage().getName(), e.getClass().getSimpleName(), e.getMessage()));
+        session.setAttribute("exception", new ExceptionData(
+                e.getClass().getPackage().getName(), e.getClass().getSimpleName(), e.getMessage())
+        );
         return "redirect:/exception-data";
     }
 
