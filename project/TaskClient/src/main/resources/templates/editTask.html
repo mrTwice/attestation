@@ -7,7 +7,8 @@
         body {
             font-family: Arial, sans-serif;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            justify-content: flex-start;
             align-items: center;
             height: 100vh;
             margin: 0;
@@ -19,6 +20,7 @@
             border: 1px solid #ccc;
             border-radius: 5px;
             background-color: #f9f9f9;
+            margin-top: 20px; /* Добавлен отступ сверху */
         }
 
         label {
@@ -53,9 +55,73 @@
             margin-top: 10px;
             text-align: center;
         }
+
+        .navbar {
+            background-color: #ffffff;
+            padding: 10px 0;
+            text-align: center;
+            color: #fff;
+        }
+
+        .navbar a {
+            text-decoration: none;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 3px;
+            margin-right: 5px;
+            background-color: transparent;
+        }
+
+        .navbar a:hover {
+            background-color: #0056b3;
+        }
+
+        .logout-form {
+            display: inline-block;
+        }
+
+        .logout-form button {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 3px;
+            background-color: #dc3545;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .logout-form button:hover {
+            background-color: #c82333;
+
+        }
+
+        .back-form {
+            display: inline-block;
+        }
+
+        .back-form button {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 3px;
+            background-color: #2b6b08;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .back-form button:hover {
+            background-color: #2b6b08;
+        }
     </style>
 </head>
 <body>
+<div class="navbar">
+    <form th:action="@{/tasks}" method="get" class="back-form">
+        <button type="submit">Отменить редактирование</button>
+    </form>
+    <form th:action="@{/logout}" method="post" class="logout-form">
+        <button type="submit">Выйти</button>
+    </form>
+</div>
+
 <div class="container">
 <form th:action="@{/tasks/{id}/edit(id=${task.id})}" method="post">
     <input type="hidden" th:name="_method" value="put"/>
@@ -98,8 +164,7 @@
         <input readonly="readonly" type="text" th:field="${task.finished}"/>
     </label>
     <br/>
-    <button type="submit">Save</button>
-    <p><a href="/tasks">Cancel</a></p>
+    <button type="submit">Сохранить</button>
 </form>
 </div>
 </body>

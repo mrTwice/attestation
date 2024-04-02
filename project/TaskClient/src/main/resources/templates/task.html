@@ -7,7 +7,8 @@
         body {
             font-family: Arial, sans-serif;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            justify-content: flex-start;
             align-items: center;
             height: 100vh;
             margin: 0;
@@ -19,6 +20,7 @@
             border: 1px solid #ccc;
             border-radius: 5px;
             background-color: #f9f9f9;
+            margin-top: 20px; /* Добавлен отступ сверху */
         }
 
         label {
@@ -53,18 +55,80 @@
             margin-top: 10px;
             text-align: center;
         }
+
+        /* Стили для навбара */
+        .navbar {
+            background-color: #ffffff;
+            padding: 10px 0;
+            text-align: center;
+            color: #fff;
+        }
+
+        .navbar a {
+            text-decoration: none;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 3px;
+            margin-right: 5px;
+            background-color: transparent;
+        }
+
+        .navbar a:hover {
+            background-color: #0056b3;
+        }
+
+        .logout-form {
+            display: inline-block;
+        }
+
+        .logout-form button {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 3px;
+            background-color: #dc3545;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .logout-form button:hover {
+            background-color: #c82333;
+
+        }
+
+        .back-form {
+            display: inline-block;
+        }
+
+        .back-form button {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 3px;
+            background-color: #2b6b08;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .back-form button:hover {
+            background-color: #2b6b08;
+        }
     </style>
 </head>
 <body>
-<div class="container">
-<p>ID: <span th:text="${task.id}"></span></p> <br>
-<p>Title: <span th:text="${task.title}"></span></p><br>
-<p>Description: <span th:text="${task.description}"></span></p><br>
-    <p><a href="/tasks" style="text-decoration: none;">Back to Tasks</a></p>
+<!-- Навбар -->
+<div class="navbar">
+    <form th:action="@{/tasks}" method="get" class="back-form">
+        <button type="submit">Назад к задачам</button>
+    </form>
+    <form th:action="@{/logout}" method="post" class="logout-form">
+        <button type="submit">Выйти</button>
+    </form>
 </div>
-<form th:action="@{/logout}" method="post">
-    <button type="submit">Выйти</button>
-</form>
+
+<!-- Контейнер -->
+<div class="container">
+    <p>ID: <span th:text="${task.id}"></span></p> <br>
+    <p>Title: <span th:text="${task.title}"></span></p><br>
+    <p>Description: <span th:text="${task.description}"></span></p><br>
+</div>
 </body>
 </html>
-
