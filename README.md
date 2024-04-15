@@ -56,7 +56,7 @@
 
 17. **Spring Integration**: Зависимость [`spring-boot-starter-integration`](https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-integration) предоставляет интеграцию с Spring Integration, которая используется для построения сложных интеграционных сценариев в приложении.
 
-18. **Thymeleaf**: Зависимость [`spring-boot-starter-thymeleaf`](https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-thymeleaf) используется для работы
+18. **Thymeleaf**: Зависимость [`spring-boot-starter-thymeleaf`](https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-thymeleaf) используется для работы шаблонизатора.
 
 19. **СУБД MySQL**: Система управления базами данных [MySQL](https://www.mysql.com) предоставляет функционал для работы с базами данных.
 
@@ -70,7 +70,7 @@
 
 * Разработка велась в IntelliJ IDEA версии Ultimate. Функционал которой позволяет работать с Docker непосредственно из среды разработки. В случае запуска проекта в среде разработки иной редакции может потребовать запустить контейнеры с базами данных самостоятельно.
 
-* В для работы над проектом , его сборки и деплоя с целью упрощения работы использовались разные переменные среды.
+* Для работы над проектом , его сборки и деплоя с целью упрощения работы использовались разные переменные среды.
     * для успешной сборки проекта в среде необходимо установить в конфигурации запуска профиль
 
           SPRING_PROFILES_ACTIVE=dev
